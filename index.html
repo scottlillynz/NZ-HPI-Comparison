@@ -683,7 +683,7 @@
 
 			var hpiResult = "The HPI around " + dateObject.toLocaleString('default', { month: 'long', year: 'numeric' }) + " was " + hpi +
 				" and the HPI now is " + latestHPI + ". This means we apply a multiplier of " +
-				multiplier.toPrecision(3) + " to the purchase price to get to what the equivalent is today.";
+				multiplier.toPrecision(3) + " to the purchase price to get to an equivalent today.";
 
 			document.getElementById('divResult').textContent = result;
 			document.getElementById('hpiResult').textContent = hpiResult;
@@ -706,6 +706,7 @@
 	<div id="hpiResult"></div>
 
 	<br><br>
+	<div>Last 5 years of HPI data (available data goes back to 1990):</div>
 	<table id="id"></table>
 </body>
 
