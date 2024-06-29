@@ -2,7 +2,6 @@
 
 <head>
 	<title>NZ House Price Index Comparison</title>
-
 	<!-- CSS -->
 	<style>
 		table {
@@ -19,7 +18,7 @@
 	<!-- XML Data-->
 	<script>
 		const xmlRawData =
-		`
+			`
 		<records>
 			<record>
 				<Date>1990-03</Date>
@@ -572,6 +571,13 @@
 		const xmlData = parser.
 			parseFromString(xmlRawData, "text/xml");
 		console.log(xmlData.getElementsByTagName('records')[0])
+		// Access elements
+		//const product = xmlDoc.getElementsByTagName('product')[0];
+		//const name = product.getElementsByTagName('name')[0].textContent;
+		//const price = product.getElementsByTagName('price')[0].textContent;
+		//const rate = product.getElementsByTagName('rate')[0].textContent;
+		//const description = product.getElementsByTagName('description')[0].textContent;
+		//console.log(`Name: ${name}, Price: ${price}, Rate: ${rate}, Description: ${description}`);
 	</script>
 
 	<!--JavaScript-->
@@ -618,7 +624,7 @@
 		}
 
 		function loadXMLData(file) {
-			/*if (window.XMLHttpRequest) {
+			if (window.XMLHttpRequest) {
 				xhttp = new XMLHttpRequest();
 			}
 			else {
@@ -626,9 +632,9 @@
 			}
 			xhttp.open("GET", file, false);
 			xhttp.send();
-			return xhttp.responseXML;*/
+			return xhttp.responseXML;
 
-			let xmlhttp = new XMLHttpRequest();
+			/*let xmlhttp = new XMLHttpRequest();
 			xmlhttp.onreadystatechange = function () {
 
 				// Request finished and response 
@@ -640,7 +646,7 @@
 				if (this.readyState == 4 && this.status == 200) {
 					return this.responseXML
 				}
-			}
+			}*/
 		}
 
 		function displayResult() {
