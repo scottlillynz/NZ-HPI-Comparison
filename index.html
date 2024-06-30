@@ -2,6 +2,7 @@
 
 <head>
 	<title>NZ House Price Index Comparison</title>
+
 	<!-- CSS -->
 	<style>
 		table {
@@ -15,101 +16,10 @@
 		}
 	</style>
 
-	<!--JavaScript-->
+	<!-- XML Data-->
 	<script>
-		function loadHPITable() {
-			let table =
-				`<tr>
-                    <th>Date</th><th>HPI</th>
-				</tr>`;
-
-			//console.log(xmlRecords)
-			//console.log(xmlRecords[0])
-
-			// Fetch the data by using TagName 
-			for (let i = xmlRecords.length - 25; i < xmlRecords.length; i++) {
-				table += "<tr><td>" +
-					new Date(xmlRecords[i].getElementsByTagName("Date")[0]
-						.textContent).toLocaleString('default', { month: 'long', year: 'numeric' }) + "</td><td>" +
-					xmlRecords[i].getElementsByTagName("HPI")[0]
-						.textContent + "</td><tr>";
-			}
-
-			// Print the xml data in table form
-			document.getElementById("id").innerHTML = table;
-		}
-
-		function displayResult() {
-			var date = document.getElementById("purMonth").value;
-			var dateObject = new Date(date)
-			var purPrice = document.getElementById("purPrice").value;
-
-			var latestHPIDate = xmlRecords[xmlRecords.length - 1]
-				.getElementsByTagName("Date")[0].textContent;
-			var latestHPI = xmlRecords[xmlRecords.length - 1]
-				.getElementsByTagName("HPI")[0].textContent;
-
-
-			for (let i = 0; i < xmlRecords.length; i++) {
-				iDate = xmlRecords[i].getElementsByTagName("Date")[0].textContent;
-				if (date == iDate) {
-					hpi = xmlRecords[i].getElementsByTagName("HPI")[0].textContent;
-					console.log(hpi)
-					break;
-				}
-				console.log("HPI Not Found");
-			}
-
-			var multiplier = latestHPI / hpi;
-
-			var adjPrice = purPrice * multiplier
-
-			var result =
-				"A New Zealand property purchased around " + dateObject.toLocaleString('default', { month: 'long', year: 'numeric' }) +
-				" for $" + purPrice.toLocaleString() +
-				" is like purchasing the property today for $" + adjPrice.toFixed().toLocaleString() +
-				".";
-
-			var hpiResult = "More details: the HPI around " + 
-				dateObject.toLocaleString('default', { month: 'long', year: 'numeric' }) +
-				" was " + hpi + " and the HPI now is " + latestHPI + ". " +
-				"We divide the latest HPI by " + hpi + " and that gives us a multiplier of " +
-				multiplier.toPrecision(3) + " to calculate how much that would be today based on official house price data.";
-
-			document.getElementById('divResult').textContent = result;
-			document.getElementById('hpiResult').textContent = hpiResult;
-
-		}
-	</script>
-	<script>
-		function loadPage() {
-			loadHPITable()
-		}
-	</script>
-</head>
-
-<body onload="loadPage()">
-	<div id="intro">
-		The property was last purchased in
-		<input type="month" id="purMonth" name="purMonth" min="1990-03" max="2023-12" required>
-		for $
-		<input type="number" id="purPrice" name="purPrice" min="1" required>
-		<input type="button" value="How much is that in today's market?" onclick="displayResult()">
-	</div>
-	<br>
-	<div id="divResult"></div>
-	<br>
-	<div id="hpiResult"></div>
-
-	<br><br>
-	<div>Last 5 years of HPI data (available data goes back to 1990):</div>
-	<table id="id"></table>
-</body>
-
-<!-- XML Data-->
-<script>
-	const xmlRawData =
-		`
+		const xmlRawData =
+			`
 	<records>
 		<record>
 			<Date>1990-03</Date>
@@ -658,11 +568,182 @@
 	</records>
 	`;
 
-	const parser = new DOMParser();
-	const xmlData = parser.
-		parseFromString(xmlRawData, "text/xml");
-	const xmlRecords = xmlData.getElementsByTagName("record")
-	//console.log(xmlRecords)
-</script>
+	</script>
+
+	<!--JavaScript-->
+	<script>
+		const parser = new DOMParser();
+		const xmlData = parser.parseFromString(xmlRawData, "text/xml");
+		const xmlRecords = xmlData.getElementsByTagName("record")
+
+		const latestHPIDate = xmlRecords[xmlRecords.length - 1]
+			.getElementsByTagName("Date")[0].textContent;
+
+		const latestHPI = xmlRecords[xmlRecords.length - 1]
+			.getElementsByTagName("HPI")[0].textContent;
+
+		function loadHPITable() {
+			let table =
+				`<tr>
+                    <th>Date</th><th>HPI</th>
+				</tr>`;
+
+			// Fetch the data by using TagName 
+			for (let i = xmlRecords.length - 25; i < xmlRecords.length; i++) {
+				table += "<tr><td>" +
+					new Date(xmlRecords[i].getElementsByTagName("Date")[0]
+						.textContent).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) + "</td><td>" +
+					xmlRecords[i].getElementsByTagName("HPI")[0]
+						.textContent + "</td><tr>";
+			}
+
+			// Print the xml data in table form
+			document.getElementById("id").innerHTML = table;
+		}
+
+		function getClosestHPI(inDate) {
+			if (inDate > latestHPIDate) {
+				return latestHPIDate
+			}
+			
+			const dateArray = inDate.split("-");
+			let year = dateArray[0];
+			let month = dateArray[1];
+
+			if (month == '02' || month == '04') {
+				month = '03'
+			}
+			else if (month == '05' || month == '07') {
+				month = '06'
+			}
+			else if (month == '08' || month == '10') {
+				month = '09'
+			}
+			else if (month == '11') {
+				month = '12'
+			}
+			else if (month == '01') {
+				month = '12'
+				year = year - 1
+			}
+			return year + "-" + month
+		}	
+
+		function displayResult() {
+			let date = document.getElementById("purYear").value + "-" + document.getElementById("purMonth").value;
+			let dateHPI = getClosestHPI(date)
+			let dateObject = new Date(date)
+			let purPrice = new Number(document.getElementById("purPrice").value);
+			let purUnit = new Number(document.getElementById("unit").value);
+			purPrice = purPrice * purUnit;
+			let hpi;
+
+			for (let i = 0; i < xmlRecords.length; i++) {
+				iDate = xmlRecords[i].getElementsByTagName("Date")[0].textContent;
+				if (dateHPI == iDate) {
+					hpi = xmlRecords[i].getElementsByTagName("HPI")[0].textContent;
+					break;
+				}
+			}
+
+			var multiplier = latestHPI / hpi;
+
+			var adjPrice = purPrice * multiplier
+
+			var result =
+				"A New Zealand property purchased in " + dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
+				" for $" + purPrice.toLocaleString() +
+				" is like purchasing the property today for $" + new Number(adjPrice.toFixed()).toLocaleString() +
+				".";
+
+			var hpiResult = "More details: the HPI used was from " +
+				new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
+				" at value " + hpi + " and the latest HPI is " + latestHPI + ". " +
+				"We need to multiply the old HPI by " + multiplier.toPrecision(3) +
+				" to get to the latest HPI. " +
+				"So, we do the same to the original purchase price and that tells us how much that would be today.";
+
+			document.getElementById('divResult').innerText = result;
+			document.getElementById('hpiResult').innerText = hpiResult;
+
+		}
+
+		function loadPage() {
+			loadHPITable()
+		}
+	</script>
+</head>
+
+<body onload="loadPage()">
+	<div id="intro">
+		The property was last purchased in
+		<select class="selectbox" id="purMonth" name="purMonth" required>
+			<option value="01">January</option>
+			<option value="02">February</option>
+			<option value="03">March</option>
+			<option value="04">April</option>
+			<option value="05">May</option>
+			<option value="06">June</option>
+			<option value="07">July</option>
+			<option value="08">August</option>
+			<option value="09">September</option>
+			<option value="10">October</option>
+			<option value="11">November</option>
+			<option value="12">December</option>
+		</select>
+		<select class="selectbox" id="purYear" name="purYear" required>
+			<option value="2024">2024</option>
+			<option value="2023">2023</option>
+			<option value="2022">2022</option>
+			<option value="2021">2021</option>
+			<option value="2020">2020</option>
+			<option value="2019">2019</option>
+			<option value="2018">2018</option>
+			<option value="2017">2017</option>
+			<option value="2016">2016</option>
+			<option value="2015">2015</option>
+			<option value="2014">2014</option>
+			<option value="2013">2013</option>
+			<option value="2012">2012</option>
+			<option value="2011">2011</option>
+			<option value="2010">2010</option>
+			<option value="2009">2009</option>
+			<option value="2008">2008</option>
+			<option value="2007">2007</option>
+			<option value="2006">2006</option>
+			<option value="2005">2005</option>
+			<option value="2004">2004</option>
+			<option value="2003">2003</option>
+			<option value="2002">2002</option>
+			<option value="2001">2001</option>
+			<option value="2000">2000</option>
+			<option value="1999">1999</option>
+			<option value="1998">1998</option>
+			<option value="1997">1997</option>
+			<option value="1996">1996</option>
+			<option value="1995">1995</option>
+			<option value="1994">1994</option>
+			<option value="1993">1993</option>
+			<option value="1992">1992</option>
+			<option value="1991">1991</option>
+			<option value="1990">1990</option>
+		</select>
+		for
+		<input type="number" id="purPrice" name="purPrice" min="1" required>
+		<select class="selectbox" id="unit" name="unit" required>
+			<option value="1000">thousand dollars</option>
+			<option value="1000000">million dollars</option>
+		</select>
+		<input type="button" value="How much is that in today's market?" onclick="displayResult()">
+	</div>
+	<br>
+	<div id="divResult"></div>
+	<br>
+	<div id="hpiResult"></div>
+
+	<br><br>
+	<div>Last 5 years of HPI data (available data goes back to 1990):</div>
+	<table id="id"></table>
+</body>
 
 </html>
