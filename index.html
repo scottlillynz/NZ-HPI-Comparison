@@ -588,7 +588,8 @@
 
 		function getClosestHPI(inDate) {
 			if (inDate >= latestHPIDate) {
-				return latestHPIDate }
+				return latestHPIDate
+			}
 			else if (inDate == '1990-01') {
 				return "1990-03"
 			}
@@ -617,6 +618,8 @@
 		}
 
 		function displayResult() {
+			document.getElementById("instructions").style.display = "none";
+
 			let date = document.getElementById("purYear").value + "-" + document.getElementById("purMonth").value;
 			let dateHPI = getClosestHPI(date)
 			let dateObject = new Date(date)
@@ -638,36 +641,38 @@
 			let multiplier = latestHPI / hpi;
 			let adjPrice = purPrice * multiplier;
 
-			let directionText;
+			let directionText = "not changed";
 
-			if (latestHPI == hpi) {
-				directionText = "not changed"
+			if (latestHPI < hpi) {
+				directionText = "decreased"
 			} else if (latestHPI > hpi) {
 				directionText = "increased"
-			} else {
-				directionText = "decreased"
 			}
 
 			let result =
-				"<h4>A New Zealand property purchased in " + dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
+				"<h4>Buying in " + dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
 				" for $" + purPrice.toLocaleString() +
-				" is like<br>purchasing the property today for $" + new Number(adjPrice.toFixed()).toLocaleString() +
-				".</h4><br>" +
+				" is like buying today for $" + new Number(adjPrice.toFixed()).toLocaleString() +
+				".</h4>" +
 				"<h5>According to the index, the property has " + directionText + " in value since the seller bought it.</h5>" +
-				"<i>The index can't tell you if significant improvements have been made to the property, or other special circumstances like subdividability.<br>Consider these in addition to the guideline above.</i>";
+				"<i><br>The index can't tell you if significant improvements have been made to the property,<br> or other special circumstances like subdividability.</i>" +
+				"<br><br><button onclick=\"showMoreInfo()\">HPI info...</button>";
 
-			let hpiResult = "More details:<br> The HPI used was from " +
+			let hpiResult = "The HPI used was from " +
 				new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
 				" at value " + hpi + " and the latest HPI is " + latestHPI + ".<br>" +
 				"We need to multiply the old HPI by " + multiplier.toPrecision(3) +
 				" to get to the latest HPI.<br>" +
-				"So, we do the same to the original purchase price and that tells us how much that would be today.";
+				"We do the same to the original purchase price and that tells us how much that would be today.";
 
 			document.getElementById('divResult').innerHTML = result;
 			document.getElementById('hpiResult').innerHTML = hpiResult;
 
-		}
 
+		}
+		function showMoreInfo() {
+			document.getElementById("hpiResult").style.display = "";
+		}
 	</script>
 </head>
 
@@ -675,11 +680,20 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
 		crossorigin="anonymous"></script>
-
 	<div id="intro" style="text-align: center">
 		<br>
 		<h2>Check today's value of a New Zealand property using the last sale price</h2>
-		<br>The current seller purchased in
+		<i>New Zealand property prices go up and down - we can estimate what a seller really paid in today's dollars
+			using the <a href="https://www.rbnz.govt.nz/statistics/series/economic-indicators/housing">Reserve Bank
+				HPI</a> data.</i><br>
+		<div id="instructions">
+			<br>First, find the last sale price using the <a href="https://www.trademe.co.nz/a/property">TradeMe
+				Property</a> listing, or the <a href="https://www.qv.co.nz/">QV lookup</a>, or your favourite property
+			information site.
+		</div>
+	</div>
+	<div id="queryBox" style="text-align: center">
+		<br>The current seller bought in
 		<select class="selectbox" id="purMonth" name="purMonth" required>
 			<option value="01">January</option>
 			<option value="02">February</option>
@@ -743,7 +757,7 @@
 	<br>
 	<div id="divResult" style="text-align: center"></div>
 	<br>
-	<div id="hpiResult" style="text-align: center"></div>
+	<div id="hpiResult" style="text-align: center; display:none"></div>
 	<br>
 	<div style="text-align: center">
 		<h2>Last 5 Years of HPI Data</h2>(available data goes back to 1990):
