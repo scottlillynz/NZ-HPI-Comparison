@@ -656,13 +656,13 @@
 				".</h4>" +
 				"<h5>According to the index, the property has " + directionText + " in value since the seller bought it.</h5>" +
 				"<i><br>The index can't tell you if significant improvements have been made to the property,<br> or other special circumstances like subdividability.</i>" +
+				"<br><br> If the seller wants more than $" + new Number(adjPrice.toFixed()).toLocaleString() + " the property could be overpriced, or special enough to justify it - maybe a valuation could help." +
 				"<br><br><button onclick=\"showMoreInfo()\">HPI info...</button>";
 
 			let hpiResult = "The HPI used was from " +
 				new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }) +
 				" at value " + hpi + " and the latest HPI is " + latestHPI + ".<br>" +
-				"We need to multiply the old HPI by " + multiplier.toPrecision(3) +
-				" to get to the latest HPI.<br>" +
+				"We need to multiply the older HPI by " + multiplier.toPrecision(3) + " to get to the latest HPI.<br>" +
 				"We do the same to the original purchase price and that tells us how much that would be today.";
 
 			document.getElementById('divResult').innerHTML = result;
@@ -746,7 +746,7 @@
 			<option value="1990">1990</option>
 		</select>
 		for $
-		<input type="number" id="purPrice" name="purPrice" min="1" value="100">
+		<input type="number" id="purPrice" name="purPrice" min="1" max="999" value="250">
 		<select class="selectbox" id="unit" name="unit" required>
 			<option value="1000">thousand dollars</option>
 			<option value="1000000">million dollars</option>
