@@ -572,10 +572,11 @@
 		const latestHPI = new Number(xmlRecords[xmlRecords.length - 1]
 			.getElementsByTagName("HPI")[0].textContent);
 
+		let chart;
 		let xValuesChart = [];
 		let yValuesChart = [];
 
-		function getChartData() {
+		function getHPIChart() {
 			// Get the last ten years of data for the line chart
 			for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
 
@@ -583,11 +584,34 @@
 					.textContent).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }));
 				yValuesChart.push(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
 			}
+
+			// Generate the HPI Chart
+			chart = new Chart(document.getElementById('lineChart'), {
+				type: "line",
+				data: {
+					labels: xValuesChart,
+					datasets: [{
+						backgroundColor: "rgba(0,0,255,1.0)",
+						borderColor: "rgba(0,0,255,0.1)",
+						data: yValuesChart,
+						label: 'NZ HPI Value',
+					}]
+				},
+				options: {
+					plugins: {
+						title: {
+							display: true,
+							text: 'Last 10 Years of HPI values (available back to 1990)'
+						}
+					}
+				}
+			});
 		}
 
 		function getNewChart() {
 			chart.destroy()
 
+			// Generate the adjusted price chart
 			chart = new Chart(document.getElementById('lineChart'), {
 				type: "line",
 				data: {
@@ -668,7 +692,7 @@
 				iDate = xmlRecords[i].getElementsByTagName("Date")[0].textContent;
 				if (dateHPI == iDate) {
 					hpi = new Number(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
-					
+
 					//Update chart values
 					xValuesChart = [];
 					yValuesChart = [];
@@ -702,7 +726,7 @@
 				<h4>Buying in ${dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}
 				for $${purPrice.toLocaleString()} is like buying today 
 				for $${new Number(adjPrice.toFixed()).toLocaleString()}.</h4>
-				<h5>According to the index, the property has ${directionText} in value since the seller bought it.</h5>
+				<h5>Overall the property has ${directionText} in value since the seller bought it. See ups and downs below.</h5>
 				`;
 
 			let moreDetails = `
@@ -727,12 +751,27 @@
 
 		}
 	</script>
+
+	<style>
+		.MobileContent {
+			display: none;
+			text-align: center;
+		}
+
+		@media screen and (max-width: 768px) {
+			.MobileContent {
+				display: block;
+			}
+		}
+	</style>
 </head>
 
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-		crossorigin="anonymous"></script>
+		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+		</script>
+	<div class="MobileContent"><b>Mobile users: rotate your screen to landscape so you can better see the graphs.</b>
+	</div>
 	<div id="intro" style="text-align: center">
 		<br>
 		<h2>Track a New Zealand house price using the House Price Index (HPI)</h2>
@@ -747,10 +786,11 @@
 			favourite property information site.
 
 		</div>
+
 	</div>
 	<div id="queryBox" style="text-align: center; width: 80%; 
 			margin: auto; margin-top: 10px; margin-bottom: 10px;
-			border: 1px solid black; padding: 10px;">
+			border: 1px solid black; padding: 10px">
 		The current seller bought in
 		<select class="selectbox" id="purMonth" name="purMonth" required>
 			<option value="01">January</option>
@@ -813,46 +853,26 @@
 		<input type="button" value="How much is that in today's market?" onclick="displayResult()">
 	</div>
 
-	<div id="divResult" style="text-align: center; margin-top: 20px"></div>
+	<div id="divResult" style="text-align: center; margin-top: 20px">
+	</div>
 
 	<div style="width: 80%; margin: auto; margin-top: 20px">
 		<canvas id="lineChart"></canvas>
 	</div>
 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<script> getHPIChart(); </script>
+
 	<div id="moreDetails" style="text-align: center; width: 80%; 
 			margin: auto; margin-top: 10px; margin-bottom: 10px;
 			border: 1px solid black; padding: 10px; display: none">
 	</div>
+
 	<div id="hpiResult" style="text-align: center; width: 80%; 
 	margin: auto; margin-top: 10px; margin-bottom: 10px;
-	border: 1px solid black; padding: 10px; display: none"></div>
+	border: 1px solid black; padding: 10px; display: none">
+	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-	<script>
-		getChartData();
-
-		let chart = new Chart(document.getElementById('lineChart'), {
-			type: "line",
-			data: {
-				labels: xValuesChart,
-				datasets: [{
-					backgroundColor: "rgba(0,0,255,1.0)",
-					borderColor: "rgba(0,0,255,0.1)",
-					data: yValuesChart,
-					label: 'NZ HPI Value',
-				}]
-			},
-			options: {
-				plugins: {
-					title: {
-						display: true,
-						text: 'Last 10 Years of HPI values (available back to 1990)'
-					}
-				}
-			}
-		});
-	</script>
 </body>
 
 </html>
