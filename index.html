@@ -634,6 +634,50 @@
 				iDate = xmlRecords[i].getElementsByTagName("Date")[0].textContent;
 				if (dateHPI == iDate) {
 					hpi = new Number(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
+					//Update chart
+					xValuesChart = [];
+					yValuesChart = [];
+
+					for (i + 1; i < xmlRecords.length; i++) {
+						xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
+							.textContent).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }));
+						let iHPI = new Number(xmlRecords[i].getElementsByTagName("HPI")[0].textContent)
+						let iAdjPrice = new Number(iHPI / hpi * purPrice)
+						yValuesChart.push(iAdjPrice.toFixed().toLocaleString());
+					}
+
+					chart.destroy()
+
+					chart = new Chart(document.getElementById('lineChart'), {
+						type: "line",
+						data: {
+							labels: xValuesChart,
+							datasets: [{
+								backgroundColor: "rgba(0,0,255,1.0)",
+								borderColor: "rgba(0,0,255,0.1)",
+								data: yValuesChart,
+								label: 'HPI-adjusted house price',
+							}]
+						},
+						options: {
+							plugins: {
+								title: {
+									display: true,
+									text: 'Tracked house price against HPI since your query date'
+								}
+							},
+							scales: {
+								y: {
+									ticks: {
+										// Include a dollar sign in the ticks
+										callback: function (value, index, ticks) {
+											return '$' + value;
+										}
+									}
+								}
+							}
+						}
+					});
 					break;
 				}
 			}
@@ -657,6 +701,7 @@
 				"<h5>According to the index, the property has " + directionText + " in value since the seller bought it.</h5>" +
 				"<i><br>The index can't tell you if significant improvements have been made to the property,<br> or other special circumstances like subdividability.</i>" +
 				"<br><br> If the seller wants more than $" + new Number(adjPrice.toFixed()).toLocaleString() + " the property could be overpriced, or special enough to justify it - maybe a valuation could help." +
+				"<br>The graph below shows the adjusted house price every quarter until today." +
 				"<br><br><button onclick=\"showMoreInfo()\">HPI info...</button>";
 
 			let hpiResult = "The HPI used was from " +
@@ -667,7 +712,6 @@
 
 			document.getElementById('divResult').innerHTML = result;
 			document.getElementById('hpiResult').innerHTML = hpiResult;
-
 
 		}
 		function showMoreInfo() {
@@ -759,9 +803,7 @@
 	<br>
 	<div id="hpiResult" style="text-align: center; display:none"></div>
 	<br>
-	<div style="text-align: center">
-		<h2>Last 5 Years of HPI Data</h2>(available data goes back to 1990):
-	</div>
+
 	<div style="width: 80%; margin: auto;">
 		<canvas id="lineChart"></canvas>
 	</div>
@@ -770,9 +812,8 @@
 
 	<script>
 		getChartData();
-		const ctx = document.getElementById('lineChart');
 
-		new Chart("lineChart", {
+		let chart = new Chart(document.getElementById('lineChart'), {
 			type: "line",
 			data: {
 				labels: xValuesChart,
@@ -783,7 +824,14 @@
 					label: 'NZ HPI Value',
 				}]
 			},
-			options: {}
+			options: {
+				plugins: {
+					title: {
+						display: true,
+						text: 'Last 5 Years of HPI Data (available back to 1990)'
+					}
+				}
+			}
 		});
 	</script>
 </body>
