@@ -581,7 +581,7 @@
 			for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
 
 				xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
-					.textContent).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }));
+					.textContent).toLocaleString("en-NZ", { month: 'short', year: 'numeric' }));
 				yValuesChart.push(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
 			}
 
@@ -699,7 +699,7 @@
 
 					for (i + 1; i < xmlRecords.length; i++) {
 						xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
-							.textContent).toLocaleString("en-NZ", { month: 'long', year: 'numeric' }));
+							.textContent).toLocaleString("en-NZ", { month: 'short', year: 'numeric' }));
 						let iHPI = new Number(xmlRecords[i].getElementsByTagName("HPI")[0].textContent)
 						let iAdjPrice = new Number(iHPI / hpi * purPrice)
 						yValuesChart.push(iAdjPrice.toFixed().toLocaleString());
