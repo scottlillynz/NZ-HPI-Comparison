@@ -4,10 +4,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>NZ House Price Index Comparison</title>
+	<title>NZ House Price HPI Tracker</title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
 	<!-- XML Data-->
 	<script>
 		const xmlRawData = `
@@ -564,28 +565,31 @@
 
 	<!--JavaScript-->
 	<script>
+		// Extract each XML record
 		const xmlRecords = xmlData.getElementsByTagName("record")
 
+		// Get the latest HPI Date and HPI value
 		const latestHPIDate = xmlRecords[xmlRecords.length - 1]
 			.getElementsByTagName("Date")[0].textContent;
-
 		const latestHPI = new Number(xmlRecords[xmlRecords.length - 1]
 			.getElementsByTagName("HPI")[0].textContent);
 
+		// Setup charting variables
 		let chart;
 		let xValuesChart = [];
 		let yValuesChart = [];
 
 		function getHPIChart() {
-			// Get the last ten years of data for the line chart
-			for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
+			// Generate the HPI Chart for the main page
 
+			// Get the last ten years of HPI data
+			for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
 				xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
 					.textContent).toLocaleString("en-NZ", { month: 'short', year: 'numeric' }));
 				yValuesChart.push(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
 			}
 
-			// Generate the HPI Chart
+			// Generate the HPI chart using ChartJS
 			chart = new Chart(document.getElementById('lineChart'), {
 				type: "line",
 				data: {
@@ -601,7 +605,8 @@
 					plugins: {
 						title: {
 							display: true,
-							text: 'Last 10 Years of HPI values (available back to 1990)'
+							text: 'Last 10 Years of HPI values (available back to 1990)',
+							font: { weight: 'bold', size: '20' }
 						}
 					}
 				}
@@ -609,9 +614,12 @@
 		}
 
 		function getNewChart() {
+			// Generate an HPI-adjusted house price chart
+
+			//Destroy the old chart (HPT or adjusted-price)
 			chart.destroy()
 
-			// Generate the adjusted price chart
+			// Generate the adjusted price chart using ChartJS
 			chart = new Chart(document.getElementById('lineChart'), {
 				type: "line",
 				data: {
@@ -627,7 +635,8 @@
 					plugins: {
 						title: {
 							display: true,
-							text: 'Tracked house price against HPI since your query date'
+							text: 'HPI-adjusted house price since your query date',
+							font: { weight: 'bold', size: '20' }
 						}
 					},
 					scales: {
@@ -645,6 +654,8 @@
 		}
 
 		function getClosestHPI(inDate) {
+			// Find the closest HPI date for the last sale reference date
+
 			if (inDate >= latestHPIDate) {
 				return latestHPIDate
 			}
@@ -652,10 +663,12 @@
 				return "1990-03"
 			}
 
+			// Split the string into year and month
 			const dateArray = inDate.split("-");
 			let year = dateArray[0];
 			let month = dateArray[1];
 
+			// Logic for finding closest HPI
 			if (month == '02' || month == '04') {
 				month = '03'
 			}
@@ -672,12 +685,17 @@
 				month = '12'
 				year = year - 1
 			}
+
 			return year + "-" + month
 		}
 
 		function displayResult() {
+			// Make calculations and update the page
+
+			// Hide the instructions box after first use
 			document.getElementById("instructions").style.display = "none";
 
+			// Setup some useful variables
 			let date = document.getElementById("purYear").value + "-" + document.getElementById("purMonth").value;
 			let dateHPI = getClosestHPI(date)
 			let dateObject = new Date(date)
@@ -688,9 +706,11 @@
 
 			let hpi;
 
+			// Retrieve the HPI and update the chart values for the new chart
 			for (let i = 0; i < xmlRecords.length; i++) {
 				iDate = xmlRecords[i].getElementsByTagName("Date")[0].textContent;
 				if (dateHPI == iDate) {
+					// Found the HPI for the date given
 					hpi = new Number(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
 
 					//Update chart values
@@ -705,12 +725,14 @@
 						yValuesChart.push(iAdjPrice.toFixed().toLocaleString());
 					}
 
+					// Generate new adjusted-price chart
 					getNewChart()
 
 					break;
 				}
 			}
 
+			// Calculate the multipler and text-direction value
 			let multiplier = latestHPI / hpi;
 			let adjPrice = purPrice * multiplier;
 
@@ -722,16 +744,17 @@
 				directionText = "increased"
 			}
 
+			// Fill the text strings for the page update
 			let result = `
 				<h4>Buying in ${dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}
 				for $${purPrice.toLocaleString()} is like buying in the last few months 
-				for $${new Number(adjPrice.toFixed()).toLocaleString()}.</h4>
-				<h5>Overall the property has ${directionText} in value since the seller bought it. See ups and downs below.</h5>
+				for $${new Number(adjPrice.toFixed()).toLocaleString()}.
+				<small class="text-body-secondary">Overall the house has ${directionText} in value since the seller bought it.
+				See the graph and <a href=#moreDetails>more details</a> below.</small></h4>
 				`;
 
 			let moreDetails = `
-				<b>Important notes:</b> 
-				<br>The prices are adjusted against the overall housing market.
+				The prices are adjusted against the overall housing market.
 				If the market itself is under- or over-valued the prices could be too.
 				It's good to understand where the market has been and which direction the it's heading at the moment to get a sense of this.
 				<br><br>Since the calculation just uses the last sale price it can't tell you
@@ -741,22 +764,25 @@
 				`;
 
 			let hpiResult = `
-				The HPI used was from ${new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })} 
+				<br><br>The HPI used was from ${new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })} 
 				at value ${hpi} and the latest HPI is ${latestHPI}.
 				<br> We multiply the older HPI by ${multiplier.toPrecision(3)} to get to the latest HPI.
 				<br> We do the same to the original purchase price to get to $${new Number(adjPrice.toFixed()).toLocaleString()}.
 				`;
 
-			document.getElementById('divResult').innerHTML = result;
-			document.getElementById('moreDetails').innerHTML = moreDetails;
-			document.getElementById('hpiResult').innerHTML = hpiResult;
+			// Update the page with the new text and unhide the display elements
+			document.getElementById('result').innerHTML = result;
+			document.getElementById("result").style.display = "";
+
 			document.getElementById("moreDetails").style.display = "";
-			document.getElementById("hpiResult").style.display = "";
+			document.getElementById('moreDetailsContentSub').innerHTML = moreDetails + hpiResult;
+
 
 		}
 	</script>
 
 	<style>
+		/* CSS for mobile device detection */
 		.MobileContent {
 			display: none;
 			text-align: center;
@@ -767,114 +793,142 @@
 				display: block;
 			}
 		}
+
+		/* CSS for callout boxes, modifier for Bootstrap */
+		.bd-callout {
+			--bs-link-color-rgb: var(--bd-callout-link);
+			--bs-code-color: var(--bd-callout-code-color);
+			padding: 1.25rem;
+			margin-top: 1.25rem;
+			margin-bottom: 1.25rem;
+			color: var(--bd-callout-color, inherit);
+			background-color: var(--bd-callout-bg, var(--bs-gray-200));
+			border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-300))
+		}
+
+		.bd-callout-warning {
+			--bd-callout-color: var(--bs-warning-text-emphasis);
+			--bd-callout-bg: var(--bs-warning-bg-subtle);
+			--bd-callout-border: var(--bs-warning-border-subtle)
+		}
 	</style>
 </head>
 
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-		</script>
-	<div class="MobileContent"><b>Mobile users: rotate your screen to landscape and refresh so you can better see the graphs.</b>
-	</div>
-	<div id="intro" style="text-align: center">
-		<h2>Track a New Zealand house price using the House Price Index (HPI)</h2>
-		<i>Estimate what a seller paid in more recent dollars using <a
-				href="https://www.rbnz.govt.nz/statistics/series/economic-indicators/housing" target="_blank">
-				Reserve Bank HPI</a> data.</i><br>
-		<div id="instructions" style="text-align: center; width: 60%; 
-		margin: auto; margin-top: 10px; margin-bottom: 10px; padding: 10px">
-			<b>What is this?</b> Track and ups and downs of a house price since the current seller bought it.
-			<br><b>What do I need?</b> Just the last sale date and price of a house you're interested in.
-			 It might be on the <a href="https://www.trademe.co.nz/a/property" target="_blank">TradeMe
-				Property</a> listing, or use <a href="https://www.qv.co.nz/" target="_blank">QV lookup</a>, or your
-			favourite property information site.
+	</script>
 
+	<div style="width: 80%; margin: auto">
+
+		<div class="MobileContent">
+			<b>Mobile users: rotate your screen to landscape and refresh so you can better see the graphs.</b>
 		</div>
 
-	</div>
-	<div id="queryBox" style="text-align: center; width: 80%; 
-			margin: auto; margin-top: 10px; margin-bottom: 10px;
-			border: 1px solid black; padding: 10px">
-		The current seller bought in
-		<select class="selectbox" id="purMonth" name="purMonth" required>
-			<option value="01">January</option>
-			<option value="02">February</option>
-			<option value="03">March</option>
-			<option value="04">April</option>
-			<option value="05">May</option>
-			<option value="06">June</option>
-			<option value="07">July</option>
-			<option value="08">August</option>
-			<option value="09">September</option>
-			<option value="10">October</option>
-			<option value="11">November</option>
-			<option value="12">December</option>
-		</select>
-		<select class="selectbox" id="purYear" name="purYear" required>
-			<option value="2024">2024</option>
-			<option value="2023">2023</option>
-			<option value="2022">2022</option>
-			<option value="2021">2021</option>
-			<option value="2020">2020</option>
-			<option value="2019">2019</option>
-			<option value="2018">2018</option>
-			<option value="2017">2017</option>
-			<option value="2016">2016</option>
-			<option value="2015">2015</option>
-			<option value="2014">2014</option>
-			<option value="2013">2013</option>
-			<option value="2012">2012</option>
-			<option value="2011">2011</option>
-			<option value="2010">2010</option>
-			<option value="2009">2009</option>
-			<option value="2008">2008</option>
-			<option value="2007">2007</option>
-			<option value="2006">2006</option>
-			<option value="2005">2005</option>
-			<option value="2004">2004</option>
-			<option value="2003">2003</option>
-			<option value="2002">2002</option>
-			<option value="2001">2001</option>
-			<option value="2000">2000</option>
-			<option value="1999">1999</option>
-			<option value="1998">1998</option>
-			<option value="1997">1997</option>
-			<option value="1996">1996</option>
-			<option value="1995">1995</option>
-			<option value="1994">1994</option>
-			<option value="1993">1993</option>
-			<option value="1992">1992</option>
-			<option value="1991">1991</option>
-			<option value="1990">1990</option>
-		</select>
-		for $
-		<input type="number" id="purPrice" name="purPrice" min="1" max="999" value="250">
-		<select class="selectbox" id="unit" name="unit" required>
-			<option value="1000">thousand dollars</option>
-			<option value="1000000">million dollars</option>
-		</select>
-		<br>
-		<input type="button" value="How much using the market index?" onclick="displayResult()">
-	</div>
+		<div id="intro" style="text-align: center">
+			<h1 class="display-6">Track a New Zealand house price using the<br>House Price Index (HPI)</h1>
+		</div>
 
-	<div id="divResult" style="text-align: center; margin-top: 20px">
-	</div>
+		<div class="bd-callout bd-callout" id="instructions"><b>What is this?</b> Track and ups and downs of a
+			house price since the current seller bought it using <a
+				href="https://www.rbnz.govt.nz/statistics/series/economic-indicators/housing" target="_blank">
+				Reserve Bank HPI</a> data.
+			<br><b>What do I need?</b> The last sale date and price of a house you're interested in.
+			It might be on the <a href="https://www.trademe.co.nz/a/property" target="_blank">TradeMe
+				Property</a> listing, or use <a href="https://www.propertyvalue.co.nz/" target="_blank">Property
+				Value</a>, or your favourite property information site.
+		</div>
 
-	<div style="width: 80%; margin: auto; margin-top: 20px">
-		<canvas id="lineChart"></canvas>
-	</div>
+		<div class="bd-callout bd-callout-warning" id="queryBox"
+			style="text-align: center; margin-top: 10px; margin-bottom: 10px; padding: 20px">
+			<div class="card-body">
+				<p class="card-text" style="margin-bottom: 0px;">
+					The current seller bought in
+					<select class="selectbox" id="purMonth" name="purMonth" required>
+						<option value="01">January</option>
+						<option value="02">February</option>
+						<option value="03">March</option>
+						<option value="04">April</option>
+						<option value="05">May</option>
+						<option value="06">June</option>
+						<option value="07">July</option>
+						<option value="08">August</option>
+						<option value="09">September</option>
+						<option value="10">October</option>
+						<option value="11">November</option>
+						<option value="12">December</option>
+					</select>
+					<select class="selectbox" id="purYear" name="purYear" required>
+						<option value="2024">2024</option>
+						<option value="2023">2023</option>
+						<option value="2022">2022</option>
+						<option value="2021">2021</option>
+						<option value="2020">2020</option>
+						<option value="2019">2019</option>
+						<option value="2018">2018</option>
+						<option value="2017">2017</option>
+						<option value="2016">2016</option>
+						<option value="2015">2015</option>
+						<option value="2014">2014</option>
+						<option value="2013">2013</option>
+						<option value="2012">2012</option>
+						<option value="2011">2011</option>
+						<option value="2010">2010</option>
+						<option value="2009">2009</option>
+						<option value="2008">2008</option>
+						<option value="2007">2007</option>
+						<option value="2006">2006</option>
+						<option value="2005">2005</option>
+						<option value="2004">2004</option>
+						<option value="2003">2003</option>
+						<option value="2002">2002</option>
+						<option value="2001">2001</option>
+						<option value="2000">2000</option>
+						<option value="1999">1999</option>
+						<option value="1998">1998</option>
+						<option value="1997">1997</option>
+						<option value="1996">1996</option>
+						<option value="1995">1995</option>
+						<option value="1994">1994</option>
+						<option value="1993">1993</option>
+						<option value="1992">1992</option>
+						<option value="1991">1991</option>
+						<option value="1990">1990</option>
+					</select>
+					for $
+					<input type="number" id="purPrice" name="purPrice" min="1" max="999" value="250">
+					<select class="selectbox" id="unit" name="unit" required>
+						<option value="1000">thousand dollars</option>
+						<option value="1000000">million dollars</option>
+					</select>
+					<input type="button" class="btn btn-outline-dark" value="How much using the market index?"
+						onclick="displayResult()" style="margin-left: 10px; margin-right: 10px;">
+				</p>
+				<p id="result" style="margin-top: 20px; display: none"></p>
+			</div>
+		</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script> getHPIChart(); </script>
+		<div style="margin: auto; margin-top: 20px">
+			<canvas id="lineChart"></canvas>
+		</div>
 
-	<div id="moreDetails" style="text-align: center; width: 80%; 
-			margin: auto; margin-top: 10px; margin-bottom: 10px;
-			border: 1px solid black; padding: 10px; display: none">
-	</div>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script> getHPIChart(); </script>
 
-	<div id="hpiResult" style="text-align: center; width: 80%; 
-	margin: auto; margin-top: 10px; margin-bottom: 10px;
-	border: 1px solid black; padding: 10px; display: none">
+		<div class="accordion" id="moreDetails"
+			style="margin: auto; margin-top: 50px; margin-bottom: 50px; display: none">
+			<div class="accordion-item">
+				<h2 class="accordion-header">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse"
+						data-bs-target="#moreDetailsContent" aria-expanded="true" aria-controls="collapseOne">
+						More details:
+					</button>
+				</h2>
+				<div id="moreDetailsContent" class="accordion-collapse collapse show" data-bs-parent="#moreDetails">
+					<div class="accordion-body" id="moreDetailsContentSub"> </div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 </body>
