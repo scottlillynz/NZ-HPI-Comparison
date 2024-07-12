@@ -555,7 +555,11 @@
 				</record>
 				<record>
 					<Date>2023-12</Date>
-					<HPI>3458</HPI>
+					<HPI>3464</HPI>
+				</record>
+				<record>
+					<Date>2024-03</Date>
+					<HPI>3467</HPI>
 				</record>
 			</records>`;
 
@@ -748,7 +752,7 @@
 			let result = `
 				<h4>Buying in ${dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}
 				for $${purPrice.toLocaleString()} is like buying in the last few months 
-				for $${new Number(adjPrice.toFixed()).toLocaleString()}.
+				for $${new Number(adjPrice.toFixed()).toLocaleString()}.<br>
 				<small class="text-body-secondary">Overall the house has ${directionText} in value since the seller bought it.
 				See the graph and <a href=#moreDetails>more details</a> below.</small></h4>
 				`;
@@ -765,7 +769,7 @@
 
 			let hpiResult = `
 				<br><br>The HPI used was from ${new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })} 
-				at value ${hpi} and the latest HPI is ${latestHPI}.
+				at value ${hpi} and the latest HPI value (${new Date(latestHPIDate).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}) is ${latestHPI}.
 				<br> We multiply the older HPI by ${multiplier.toPrecision(3)} to get to the latest HPI.
 				<br> We do the same to the original purchase price to get to $${new Number(adjPrice.toFixed()).toLocaleString()}.
 				`;
@@ -817,7 +821,7 @@
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-	</script>
+		</script>
 
 	<div style="width: 80%; margin: auto">
 
@@ -863,7 +867,7 @@
 						<option value="2023">2023</option>
 						<option value="2022">2022</option>
 						<option value="2021">2021</option>
-						<option value="2020">2020</option>
+						<option value="2020" selected>2020</option>
 						<option value="2019">2019</option>
 						<option value="2018">2018</option>
 						<option value="2017">2017</option>
