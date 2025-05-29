@@ -9,580 +9,15 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
 		integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-	<!-- XML Data-->
 	<script>
-		const xmlRawData = `
-			<records>
-				<record>
-					<Date>1990-03</Date>
-					<HPI>477</HPI>
-				</record>
-				<record>
-					<Date>1990-06</Date>
-					<HPI>480</HPI>
-				</record>
-				<record>
-					<Date>1990-09</Date>
-					<HPI>483</HPI>
-				</record>
-				<record>
-					<Date>1990-12</Date>
-					<HPI>482</HPI>
-				</record>
-				<record>
-					<Date>1991-03</Date>
-					<HPI>479</HPI>
-				</record>
-				<record>
-					<Date>1991-06</Date>
-					<HPI>470</HPI>
-				</record>
-				<record>
-					<Date>1991-09</Date>
-					<HPI>468</HPI>
-				</record>
-				<record>
-					<Date>1991-12</Date>
-					<HPI>466</HPI>
-				</record>
-				<record>
-					<Date>1992-03</Date>
-					<HPI>468</HPI>
-				</record>
-				<record>
-					<Date>1992-06</Date>
-					<HPI>467</HPI>
-				</record>
-				<record>
-					<Date>1992-09</Date>
-					<HPI>470</HPI>
-				</record>
-				<record>
-					<Date>1992-12</Date>
-					<HPI>477</HPI>
-				</record>
-				<record>
-					<Date>1993-03</Date>
-					<HPI>481</HPI>
-				</record>
-				<record>
-					<Date>1993-06</Date>
-					<HPI>482</HPI>
-				</record>
-				<record>
-					<Date>1993-09</Date>
-					<HPI>491</HPI>
-				</record>
-				<record>
-					<Date>1993-12</Date>
-					<HPI>503</HPI>
-				</record>
-				<record>
-					<Date>1994-03</Date>
-					<HPI>520</HPI>
-				</record>
-				<record>
-					<Date>1994-06</Date>
-					<HPI>536</HPI>
-				</record>
-				<record>
-					<Date>1994-09</Date>
-					<HPI>554</HPI>
-				</record>
-				<record>
-					<Date>1994-12</Date>
-					<HPI>572</HPI>
-				</record>
-				<record>
-					<Date>1995-03</Date>
-					<HPI>579</HPI>
-				</record>
-				<record>
-					<Date>1995-06</Date>
-					<HPI>585</HPI>
-				</record>
-				<record>
-					<Date>1995-09</Date>
-					<HPI>599</HPI>
-				</record>
-				<record>
-					<Date>1995-12</Date>
-					<HPI>621</HPI>
-				</record>
-				<record>
-					<Date>1996-03</Date>
-					<HPI>653</HPI>
-				</record>
-				<record>
-					<Date>1996-06</Date>
-					<HPI>663</HPI>
-				</record>
-				<record>
-					<Date>1996-09</Date>
-					<HPI>662</HPI>
-				</record>
-				<record>
-					<Date>1996-12</Date>
-					<HPI>680</HPI>
-				</record>
-				<record>
-					<Date>1997-03</Date>
-					<HPI>696</HPI>
-				</record>
-				<record>
-					<Date>1997-06</Date>
-					<HPI>702</HPI>
-				</record>
-				<record>
-					<Date>1997-09</Date>
-					<HPI>706</HPI>
-				</record>
-				<record>
-					<Date>1997-12</Date>
-					<HPI>715</HPI>
-				</record>
-				<record>
-					<Date>1998-03</Date>
-					<HPI>709</HPI>
-				</record>
-				<record>
-					<Date>1998-06</Date>
-					<HPI>688</HPI>
-				</record>
-				<record>
-					<Date>1998-09</Date>
-					<HPI>677</HPI>
-				</record>
-				<record>
-					<Date>1998-12</Date>
-					<HPI>690</HPI>
-				</record>
-				<record>
-					<Date>1999-03</Date>
-					<HPI>701</HPI>
-				</record>
-				<record>
-					<Date>1999-06</Date>
-					<HPI>705</HPI>
-				</record>
-				<record>
-					<Date>1999-09</Date>
-					<HPI>706</HPI>
-				</record>
-				<record>
-					<Date>1999-12</Date>
-					<HPI>705</HPI>
-				</record>
-				<record>
-					<Date>2000-03</Date>
-					<HPI>705</HPI>
-				</record>
-				<record>
-					<Date>2000-06</Date>
-					<HPI>698</HPI>
-				</record>
-				<record>
-					<Date>2000-09</Date>
-					<HPI>697</HPI>
-				</record>
-				<record>
-					<Date>2000-12</Date>
-					<HPI>697</HPI>
-				</record>
-				<record>
-					<Date>2001-03</Date>
-					<HPI>701</HPI>
-				</record>
-				<record>
-					<Date>2001-06</Date>
-					<HPI>700</HPI>
-				</record>
-				<record>
-					<Date>2001-09</Date>
-					<HPI>706</HPI>
-				</record>
-				<record>
-					<Date>2001-12</Date>
-					<HPI>718</HPI>
-				</record>
-				<record>
-					<Date>2002-03</Date>
-					<HPI>737</HPI>
-				</record>
-				<record>
-					<Date>2002-06</Date>
-					<HPI>752</HPI>
-				</record>
-				<record>
-					<Date>2002-09</Date>
-					<HPI>773</HPI>
-				</record>
-				<record>
-					<Date>2002-12</Date>
-					<HPI>801</HPI>
-				</record>
-				<record>
-					<Date>2003-03</Date>
-					<HPI>842</HPI>
-				</record>
-				<record>
-					<Date>2003-06</Date>
-					<HPI>871</HPI>
-				</record>
-				<record>
-					<Date>2003-09</Date>
-					<HPI>938</HPI>
-				</record>
-				<record>
-					<Date>2003-12</Date>
-					<HPI>1000</HPI>
-				</record>
-				<record>
-					<Date>2004-03</Date>
-					<HPI>1041</HPI>
-				</record>
-				<record>
-					<Date>2004-06</Date>
-					<HPI>1066</HPI>
-				</record>
-				<record>
-					<Date>2004-09</Date>
-					<HPI>1091</HPI>
-				</record>
-				<record>
-					<Date>2004-12</Date>
-					<HPI>1125</HPI>
-				</record>
-				<record>
-					<Date>2005-03</Date>
-					<HPI>1180</HPI>
-				</record>
-				<record>
-					<Date>2005-06</Date>
-					<HPI>1214</HPI>
-				</record>
-				<record>
-					<Date>2005-09</Date>
-					<HPI>1251</HPI>
-				</record>
-				<record>
-					<Date>2005-12</Date>
-					<HPI>1300</HPI>
-				</record>
-				<record>
-					<Date>2006-03</Date>
-					<HPI>1324</HPI>
-				</record>
-				<record>
-					<Date>2006-06</Date>
-					<HPI>1337</HPI>
-				</record>
-				<record>
-					<Date>2006-09</Date>
-					<HPI>1370</HPI>
-				</record>
-				<record>
-					<Date>2006-12</Date>
-					<HPI>1418</HPI>
-				</record>
-				<record>
-					<Date>2007-03</Date>
-					<HPI>1479</HPI>
-				</record>
-				<record>
-					<Date>2007-06</Date>
-					<HPI>1520</HPI>
-				</record>
-				<record>
-					<Date>2007-09</Date>
-					<HPI>1526</HPI>
-				</record>
-				<record>
-					<Date>2007-12</Date>
-					<HPI>1531</HPI>
-				</record>
-				<record>
-					<Date>2008-03</Date>
-					<HPI>1521</HPI>
-				</record>
-				<record>
-					<Date>2008-06</Date>
-					<HPI>1453</HPI>
-				</record>
-				<record>
-					<Date>2008-09</Date>
-					<HPI>1423</HPI>
-				</record>
-				<record>
-					<Date>2008-12</Date>
-					<HPI>1395</HPI>
-				</record>
-				<record>
-					<Date>2009-03</Date>
-					<HPI>1383</HPI>
-				</record>
-				<record>
-					<Date>2009-06</Date>
-					<HPI>1407</HPI>
-				</record>
-				<record>
-					<Date>2009-09</Date>
-					<HPI>1438</HPI>
-				</record>
-				<record>
-					<Date>2009-12</Date>
-					<HPI>1468</HPI>
-				</record>
-				<record>
-					<Date>2010-03</Date>
-					<HPI>1469</HPI>
-				</record>
-				<record>
-					<Date>2010-06</Date>
-					<HPI>1455</HPI>
-				</record>
-				<record>
-					<Date>2010-09</Date>
-					<HPI>1445</HPI>
-				</record>
-				<record>
-					<Date>2010-12</Date>
-					<HPI>1444</HPI>
-				</record>
-				<record>
-					<Date>2011-03</Date>
-					<HPI>1447</HPI>
-				</record>
-				<record>
-					<Date>2011-06</Date>
-					<HPI>1452</HPI>
-				</record>
-				<record>
-					<Date>2011-09</Date>
-					<HPI>1474</HPI>
-				</record>
-				<record>
-					<Date>2011-12</Date>
-					<HPI>1477</HPI>
-				</record>
-				<record>
-					<Date>2012-03</Date>
-					<HPI>1493</HPI>
-				</record>
-				<record>
-					<Date>2012-06</Date>
-					<HPI>1510</HPI>
-				</record>
-				<record>
-					<Date>2012-09</Date>
-					<HPI>1541</HPI>
-				</record>
-				<record>
-					<Date>2012-12</Date>
-					<HPI>1572</HPI>
-				</record>
-				<record>
-					<Date>2013-03</Date>
-					<HPI>1609</HPI>
-				</record>
-				<record>
-					<Date>2013-06</Date>
-					<HPI>1645</HPI>
-				</record>
-				<record>
-					<Date>2013-09</Date>
-					<HPI>1697</HPI>
-				</record>
-				<record>
-					<Date>2013-12</Date>
-					<HPI>1715</HPI>
-				</record>
-				<record>
-					<Date>2014-03</Date>
-					<HPI>1734</HPI>
-				</record>
-				<record>
-					<Date>2014-06</Date>
-					<HPI>1749</HPI>
-				</record>
-				<record>
-					<Date>2014-09</Date>
-					<HPI>1778</HPI>
-				</record>
-				<record>
-					<Date>2014-12</Date>
-					<HPI>1835</HPI>
-				</record>
-				<record>
-					<Date>2015-03</Date>
-					<HPI>1892</HPI>
-				</record>
-				<record>
-					<Date>2015-06</Date>
-					<HPI>1956</HPI>
-				</record>
-				<record>
-					<Date>2015-09</Date>
-					<HPI>2045</HPI>
-				</record>
-				<record>
-					<Date>2015-12</Date>
-					<HPI>2060</HPI>
-				</record>
-				<record>
-					<Date>2016-03</Date>
-					<HPI>2136</HPI>
-				</record>
-				<record>
-					<Date>2016-06</Date>
-					<HPI>2249</HPI>
-				</record>
-				<record>
-					<Date>2016-09</Date>
-					<HPI>2333</HPI>
-				</record>
-				<record>
-					<Date>2016-12</Date>
-					<HPI>2355</HPI>
-				</record>
-				<record>
-					<Date>2017-03</Date>
-					<HPI>2391</HPI>
-				</record>
-				<record>
-					<Date>2017-06</Date>
-					<HPI>2395</HPI>
-				</record>
-				<record>
-					<Date>2017-09</Date>
-					<HPI>2422</HPI>
-				</record>
-				<record>
-					<Date>2017-12</Date>
-					<HPI>2449</HPI>
-				</record>
-				<record>
-					<Date>2018-03</Date>
-					<HPI>2481</HPI>
-				</record>
-				<record>
-					<Date>2018-06</Date>
-					<HPI>2481</HPI>
-				</record>
-				<record>
-					<Date>2018-09</Date>
-					<HPI>2495</HPI>
-				</record>
-				<record>
-					<Date>2018-12</Date>
-					<HPI>2517</HPI>
-				</record>
-				<record>
-					<Date>2019-03</Date>
-					<HPI>2526</HPI>
-				</record>
-				<record>
-					<Date>2019-06</Date>
-					<HPI>2518</HPI>
-				</record>
-				<record>
-					<Date>2019-09</Date>
-					<HPI>2565</HPI>
-				</record>
-				<record>
-					<Date>2019-12</Date>
-					<HPI>2633</HPI>
-				</record>
-				<record>
-					<Date>2020-03</Date>
-					<HPI>2722</HPI>
-				</record>
-				<record>
-					<Date>2020-06</Date>
-					<HPI>2696</HPI>
-				</record>
-				<record>
-					<Date>2020-09</Date>
-					<HPI>2839</HPI>
-				</record>
-				<record>
-					<Date>2020-12</Date>
-					<HPI>3081</HPI>
-				</record>
-				<record>
-					<Date>2021-03</Date>
-					<HPI>3379</HPI>
-				</record>
-				<record>
-					<Date>2021-06</Date>
-					<HPI>3495</HPI>
-				</record>
-				<record>
-					<Date>2021-09</Date>
-					<HPI>3704</HPI>
-				</record>
-				<record>
-					<Date>2021-12</Date>
-					<HPI>3920</HPI>
-				</record>
-				<record>
-					<Date>2022-03</Date>
-					<HPI>3846</HPI>
-				</record>
-				<record>
-					<Date>2022-06</Date>
-					<HPI>3681</HPI>
-				</record>
-				<record>
-					<Date>2022-09</Date>
-					<HPI>3548</HPI>
-				</record>
-				<record>
-					<Date>2022-12</Date>
-					<HPI>3484</HPI>
-				</record>
-				<record>
-					<Date>2023-03</Date>
-					<HPI>3382</HPI>
-				</record>
-				<record>
-					<Date>2023-06</Date>
-					<HPI>3349</HPI>
-				</record>
-				<record>
-					<Date>2023-09</Date>
-					<HPI>3404</HPI>
-				</record>
-				<record>
-					<Date>2023-12</Date>
-					<HPI>3464</HPI>
-				</record>
-				<record>
-					<Date>2024-03</Date>
-					<HPI>3470</HPI>
-				</record>
-				<record>
-					<Date>2024-06</Date>
-					<HPI>3398</HPI>
-				</record>
-				<record>
-					<Date>2024-09</Date>
-					<HPI>3375</HPI>
-				</record>
-				<record>
-					<Date>2024-12</Date>
-					<HPI>3408</HPI>
-				</record>
-			</records>`;
+		// Get the XML data from separate file
+		let xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", "hpiRecords.xml", false);
+		xmlhttp.send();
+		const xmlRawData = xmlhttp.responseXML;
 
-		const parser = new DOMParser();
-		const xmlData = parser.parseFromString(xmlRawData, "text/xml");
-	</script>
-
-	<!--JavaScript-->
-	<script>
 		// Extract each XML record
-		const xmlRecords = xmlData.getElementsByTagName("record")
+		const xmlRecords = xmlRawData.getElementsByTagName("record")
 
 		// Get the latest HPI Date and HPI value
 		const latestHPIDate = xmlRecords[xmlRecords.length - 1]
@@ -594,15 +29,30 @@
 		let chart;
 		let xValuesChart = [];
 		let yValuesChart = [];
+		let firstChart = true;
+		let chartTitle = 'Last 10 Years of HPI values (available back to 1990)'
+		let chartDataLabel = 'NZ HPI Value'
+		let chartYTicks = ''
 
-		function getHPIChart() {
+		function generateChart() {
 			// Generate the HPI Chart for the main page
 
-			// Get the last ten years of HPI data
-			for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
-				xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
-					.textContent).toLocaleString("en-NZ", { month: 'short', year: 'numeric' }));
-				yValuesChart.push(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
+			if (firstChart) {
+				firstChart = false;
+
+				// Get the last ten years of HPI data
+				for (let i = xmlRecords.length - 41; i < xmlRecords.length; i++) {
+					xValuesChart.push(new Date(xmlRecords[i].getElementsByTagName("Date")[0]
+						.textContent).toLocaleString("en-NZ", { month: 'short', year: 'numeric' }));
+					yValuesChart.push(xmlRecords[i].getElementsByTagName("HPI")[0].textContent);
+				}
+			} else {
+				chartTitle = 'HPI-adjusted house price since your query date'
+				chartDataLabel = 'HPI-adjusted house price'
+				chartYTicks = '$'
+
+				//Destroy the old chart (HPT or adjusted-price)
+				chart.destroy()
 			}
 
 			// Generate the HPI chart using ChartJS
@@ -614,44 +64,14 @@
 						backgroundColor: "rgba(0,0,255,1.0)",
 						borderColor: "rgba(0,0,255,0.1)",
 						data: yValuesChart,
-						label: 'NZ HPI Value',
+						label: chartDataLabel,
 					}]
 				},
 				options: {
 					plugins: {
 						title: {
 							display: true,
-							text: 'Last 10 Years of HPI values (available back to 1990)',
-							font: { weight: 'bold', size: '20' }
-						}
-					}
-				}
-			});
-		}
-
-		function getNewChart() {
-			// Generate an HPI-adjusted house price chart
-
-			//Destroy the old chart (HPT or adjusted-price)
-			chart.destroy()
-
-			// Generate the adjusted price chart using ChartJS
-			chart = new Chart(document.getElementById('lineChart'), {
-				type: "line",
-				data: {
-					labels: xValuesChart,
-					datasets: [{
-						backgroundColor: "rgba(0,0,255,1.0)",
-						borderColor: "rgba(0,0,255,0.1)",
-						data: yValuesChart,
-						label: 'HPI-adjusted house price',
-					}]
-				},
-				options: {
-					plugins: {
-						title: {
-							display: true,
-							text: 'HPI-adjusted house price since your query date',
+							text: chartTitle,
 							font: { weight: 'bold', size: '20' }
 						}
 					},
@@ -660,7 +80,7 @@
 							ticks: {
 								// Include a dollar sign in the ticks
 								callback: function (value, index, ticks) {
-									return '$' + value;
+									return chartYTicks + value.toLocaleString();
 								}
 							}
 						}
@@ -742,7 +162,7 @@
 					}
 
 					// Generate new adjusted-price chart
-					getNewChart()
+					generateChart()
 
 					break;
 				}
@@ -765,22 +185,27 @@
 				<h4>Buying in ${dateObject.toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}
 				for $${purPrice.toLocaleString()} is like buying in the last few months 
 				for $${new Number(adjPrice.toFixed()).toLocaleString()}.<br>
-				<small class="text-body-secondary">Overall the house has ${directionText} in value since the seller bought it.
+				<small class="text-body-secondary">The house has probably ${directionText} in value since the seller bought it.
 				See the graph and <a href=#moreDetails>more details</a> below.</small></h4>
 				`;
 
 			let moreDetails = `
-				The prices are adjusted against the overall housing market.
-				If the market itself is under- or over-valued the prices could be too.
-				It's good to understand where the market has been and which direction the it's heading at the moment to get a sense of this.
-				<br><br>Since the calculation just uses the last sale price it can't tell you
-				if the property has significantly changed since it was last sold.
-				If improvements have been made to the property,	or it was subdivided, or a power pylon is now in the back yard
-				- you'll have to do some adjusting yourself. Consider a registered valuation if there's too many unknowns.
+				The chart may help understand where the market has been and which direction it's heading.
+				The HPI values are not location-specific, they are averaged across all of New Zealand for the points in time shown.
+				<br><br>These points represent a market-tracked price since the last sale,
+				the market could have been under- or over-valued during this time period, and therefore so could these prices.
+				<ul><li> Example: assume at the most recent market peak (Dec 2021) someone paid 20% over a house's real value
+				to secure it at auction. Today's HPI adjusted value would still show a price about 20% too high.</li></ul>
+				Since the calculation just uses the last sale price it can't tell you
+				if the property has significantly changed since it was last sold. 
+				You should consider for yourself adding the value of any improvements or otherwise reflecting changes such as
+				if the property has been subdivided, or could now be subdivided, or if a noisy business has started up next door.
+				<br><br>This site is intended to give you another piece of information about a potential house price.
+				Consider a registered valuation if you want a much more accurate idea of a house's value.
 				`;
 
 			let hpiResult = `
-				<br><br>The HPI used was from ${new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })} 
+				<br><br>A little math: the HPI used was from ${new Date(dateHPI).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })} 
 				at value ${hpi} and the latest HPI value (${new Date(latestHPIDate).toLocaleString("en-NZ", { month: 'long', year: 'numeric' })}) is ${latestHPI}.
 				<br> We multiply the older HPI by ${multiplier.toPrecision(3)} to get to the latest HPI.
 				<br> We do the same to the original purchase price to get to $${new Number(adjPrice.toFixed()).toLocaleString()}.
@@ -850,9 +275,8 @@
 				href="https://www.rbnz.govt.nz/statistics/series/economic-indicators/housing" target="_blank">
 				Reserve Bank HPI</a> data.
 			<br><b>What do I need?</b> The last sale date and price of a house you're interested in.
-			It might be on the <a href="https://www.trademe.co.nz/a/property" target="_blank">TradeMe
-				Property</a> listing, or use <a href="https://www.propertyvalue.co.nz/" target="_blank">Property
-				Value</a>, or your favourite property information site.
+			Use <a href="https://www.propertyvalue.co.nz/" target="_blank">Property
+				Value</a> to find this, or your favourite property information site.
 		</div>
 
 		<div class="bd-callout bd-callout-warning" id="queryBox"
@@ -875,6 +299,7 @@
 						<option value="12">December</option>
 					</select>
 					<select class="selectbox" id="purYear" name="purYear" required>
+						<option value="2025">2025</option>
 						<option value="2024">2024</option>
 						<option value="2023">2023</option>
 						<option value="2022">2022</option>
@@ -929,7 +354,7 @@
 		</div>
 
 		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-		<script> getHPIChart(); </script>
+		<script> generateChart(); </script>
 
 		<div class="accordion" id="moreDetails"
 			style="margin: auto; margin-top: 50px; margin-bottom: 50px; display: none">
