@@ -563,8 +563,12 @@
         <Date>2025-03</Date>
         <HPI>3412</HPI>
     </record>
-        <record>
+    <record>
         <Date>2025-06</Date>
+        <HPI>3375</HPI>
+    </record>
+    <record>
+        <Date>2025-09</Date>
         <HPI>3374</HPI>
     </record>
 </records>
